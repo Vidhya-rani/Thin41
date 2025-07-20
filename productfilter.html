@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Filter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    input, select, button {
+      margin: 5px;
+      padding: 6px;
+    }
+    ul {
+      margin-top: 20px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Product Filter</h2>
+
+  <label>Min Price: <input type="number" id="minPrice" placeholder="e.g. 1000"></label>
+  <label>Max Price: <input type="number" id="maxPrice" placeholder="e.g. 3000"></label><br>
+
+  <label>Brand:
+    <select id="brandFilter">
+      <option value="">All</option>
+      <option value="Nike">Nike</option>
+      <option value="Adidas">Adidas</option>
+      <option value="Puma">Puma</option>
+      <option value="Reebok">Reebok</option>
+    </select>
+  </label>
+
+  <label>Category:
+    <select id="categoryFilter">
+      <option value="">All</option>
+      <option value="Shoes">Shoes</option>
+      <option value="Clothing">Clothing</option>
+      <option value="Accessories">Accessories</option>
+    </select>
+  </label><br>
+
+  <label>Search by Name: <input type="text" id="searchName" placeholder="e.g. Nike"></label><br>
+
+  <button onclick="filterProducts()">Apply Filters</button>
+  <button onclick="resetFilters()">Reset Filters</button>
+
+  <ul id="productList"></ul>
+
+  <script>
+    const products = [
+      { name: "Nike Shoes", brand: "Nike", category: "Shoes", price: 2500 },
+      { name: "Adidas T-shirt", brand: "Adidas", category: "Clothing", price: 1500 },
+      { name: "Puma Shorts", brand: "Puma", category: "Clothing", price: 1000 },
+      { name: "Nike Cap", brand: "Nike", category: "Accessories", price: 700 },
+      { name: "Reebok Shoes", brand: "Reebok", category: "Shoes", price: 2200 }
+    ];
+
+    function filterProducts() {
+      const min = parseFloat(document.getElementById("minPrice").value) || 0;
+      const max = parseFloat(document.getElementById("maxPrice").value) || Infinity;
+      const brand = document.getElementById("brandFilter").value;
+      const category = document.getElementById("categoryFilter").value;
+      const search = document.getElementById("searchName").value.toLowerCase();
+
+      const filtered = products.filter(product => {
+        const matchesPrice = product.price >= min && product.price <= max;
+        const matchesBrand = !brand || product.brand === brand;
+        const matchesCategory = !category || product.category === category;
+        const matchesSearch = product.name.toLowerCase().includes(search);
+
+        return matchesPrice && matchesBrand && matchesCategory && matchesSearch;
+      });
+
+      displayProducts(filtered);
+    }
+
+    function displayProducts(productArray) {
+      const list = document.getElementById("productList");
+      list.innerHTML = "";
+
+      if (productArray.length === 0) {
+        list.innerHTML = "<li>No products match your filters.</li>";
+        return;
+      }
+
+      productArray.forEach(product => {
+        const li = document.createElement("li");
+        li.textContent = `${product.name} - ${product.brand} - ${product.category} - ₹${product.price}`;
+        list.appendChild(li);
+      });
+    }
+
+    function resetFilters() {
+      document.getElementById("minPrice").value = "";
+      document.getElementById("maxPrice").value = "";
+      document.getElementById("brandFilter").value = "";
+      document.getElementById("categoryFilter").value = "";
+      document.getElementById("searchName").value = "";
+      displayProducts(products);
+    }
+
+    // Show all products on initial load
+    window.onload = () => {
+      displayProducts(products);
+    };
+  </script>
+
+</body>
+</html>
