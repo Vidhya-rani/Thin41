@@ -5,51 +5,126 @@
   <title>Product Filter</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
       padding: 20px;
+      max-width: 800px;
+      margin: auto;
     }
-    input, select, button {
-      margin: 5px;
-      padding: 6px;
+
+    h2 {
+      text-align: center;
+      color: #333;
     }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      justify-content: space-between;
+    }
+
+    .filters label {
+      flex: 1 1 180px;
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+    }
+
+    input, select {
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 14px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
     ul {
-      margin-top: 20px;
+      list-style: none;
+      padding: 0;
     }
+
     li {
-      margin-bottom: 8px;
+      background-color: white;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .no-results {
+      color: #ff3333;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
 
-  <h2>Product Filter</h2>
+  <h2>🛍️ Product Filter</h2>
 
-  <label>Min Price: <input type="number" id="minPrice" placeholder="e.g. 1000"></label>
-  <label>Max Price: <input type="number" id="maxPrice" placeholder="e.g. 3000"></label><br>
+  <div class="filters">
+    <label>
+      Min Price
+      <input type="number" id="minPrice" placeholder="e.g. 1000">
+    </label>
 
-  <label>Brand:
-    <select id="brandFilter">
-      <option value="">All</option>
-      <option value="Nike">Nike</option>
-      <option value="Adidas">Adidas</option>
-      <option value="Puma">Puma</option>
-      <option value="Reebok">Reebok</option>
-    </select>
-  </label>
+    <label>
+      Max Price
+      <input type="number" id="maxPrice" placeholder="e.g. 3000">
+    </label>
 
-  <label>Category:
-    <select id="categoryFilter">
-      <option value="">All</option>
-      <option value="Shoes">Shoes</option>
-      <option value="Clothing">Clothing</option>
-      <option value="Accessories">Accessories</option>
-    </select>
-  </label><br>
+    <label>
+      Brand
+      <select id="brandFilter">
+        <option value="">All Brands</option>
+        <option value="Nike">Nike</option>
+        <option value="Adidas">Adidas</option>
+        <option value="Puma">Puma</option>
+        <option value="Reebok">Reebok</option>
+      </select>
+    </label>
 
-  <label>Search by Name: <input type="text" id="searchName" placeholder="e.g. Nike"></label><br>
+    <label>
+      Category
+      <select id="categoryFilter">
+        <option value="">All Categories</option>
+        <option value="Shoes">Shoes</option>
+        <option value="Clothing">Clothing</option>
+        <option value="Accessories">Accessories</option>
+      </select>
+    </label>
 
-  <button onclick="filterProducts()">Apply Filters</button>
-  <button onclick="resetFilters()">Reset Filters</button>
+    <label>
+      Search by Name
+      <input type="text" id="searchName" placeholder="e.g. Nike Cap">
+    </label>
+  </div>
+
+  <div class="button-group">
+    <button onclick="filterProducts()">Apply Filters</button>
+    <button onclick="resetFilters()">Reset Filters</button>
+  </div>
 
   <ul id="productList"></ul>
 
@@ -74,7 +149,6 @@
         const matchesBrand = !brand || product.brand === brand;
         const matchesCategory = !category || product.category === category;
         const matchesSearch = product.name.toLowerCase().includes(search);
-
         return matchesPrice && matchesBrand && matchesCategory && matchesSearch;
       });
 
@@ -86,7 +160,7 @@
       list.innerHTML = "";
 
       if (productArray.length === 0) {
-        list.innerHTML = "<li>No products match your filters.</li>";
+        list.innerHTML = "<li class='no-results'>No products match your filters.</li>";
         return;
       }
 
@@ -106,7 +180,6 @@
       displayProducts(products);
     }
 
-    // Show all products on initial load
     window.onload = () => {
       displayProducts(products);
     };
@@ -114,3 +187,4 @@
 
 </body>
 </html>
+
